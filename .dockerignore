@@ -1,0 +1,4 @@
+/LICENSE
+/README.md
+/docker-compose.yml
+/db/migrations/sqlc

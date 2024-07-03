@@ -1,0 +1,19 @@
+services:
+  rest-api:
+    build: .
+    ports: [ "8000:8000" ]
+    networks: [ database ]
+    depends_on: [ postgres ]
+
+  postgres:
+    image: postgres:latest
+    ports: [ "5432:5432" ]
+    networks: [ database ]
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: spy-cat-agency
+
+networks:
+  database:
+    driver: bridge

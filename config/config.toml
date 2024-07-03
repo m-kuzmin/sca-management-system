@@ -1,0 +1,15 @@
+[database]
+driver = "postgres"
+address = "postgresql://admin:password@postgres:5432/spy-cat-agency?sslmode=disable"
+dbName = "sca"
+
+pingRetries = 5
+pingIntervalSecs = 7
+migrationsSource = "file:///var/server/migrations"
+
+[server]
+port = 8000
+readTimeoutMs = 1000
+
+[server.gin]
+mode = "release"
