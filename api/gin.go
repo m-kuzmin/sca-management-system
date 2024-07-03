@@ -9,6 +9,7 @@ func NewGinRouter(server *Server) *gin.Engine {
 
 	router.POST("/cat", server.CreateCat)
 	router.GET("/cat", server.GetCatByID)
+	router.DELETE("/cat", server.DeleteCatByID)
 
 	return router
 }

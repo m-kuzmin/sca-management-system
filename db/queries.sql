@@ -12,3 +12,6 @@ FROM
 WHERE
     id = $1;
 
+-- name: DeteleCatByID :exec
+DELETE FROM cats
+WHERE id = $1;

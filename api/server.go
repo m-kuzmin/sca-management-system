@@ -88,3 +88,26 @@ func (s *Server) GetCatByID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusFound, cat)
 }
+
+func (s *Server) DeleteCatByID(ctx *gin.Context) {
+	str := ctx.Query("id")
+	id := uuid.UUID{}
+
+	err := id.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid or missing cat id",
+		})
+		return
+	}
+
+	if err = s.db.DeleteCatByID(ctx.Request.Context(), id); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "failed to delete a cat",
+		})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+	})
+}
