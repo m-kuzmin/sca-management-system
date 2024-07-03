@@ -17,7 +17,16 @@ type Querier interface {
 
 // CatQuerier can only query the cat info
 type CatQuerier interface {
-	CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, sallary uint) (uuid.UUID, error)
+	CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, salary uint) (uuid.UUID, error)
+	GetCatByID(ctx context.Context, id uuid.UUID) (Cat, error)
+}
+
+type Cat struct {
+	Name              string
+	Breed             string
+	YearsOfExperience uint32
+	Salary            uint64
+	ID                uuid.UUID
 }
 
 func ConnectToDBWithRetry(driver, address string, retries uint, interval time.Duration) (*sql.DB, error) {
