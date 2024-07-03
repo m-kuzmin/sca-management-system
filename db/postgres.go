@@ -1,18 +1,34 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
+	"github.com/google/uuid"
 	"github.com/m-kuzmin/sca-management-system/db/sqlc"
 )
 
 type Postgres struct {
 	conn    *sql.DB
 	queries *sqlc.Queries
+}
+
+// CreateCat implements Querier.
+func (p *Postgres) CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, salary uint) (uuid.UUID, error) {
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("failed to create a uuid: %w", err)
+	}
+
+	err = p.queries.CreateCat(ctx, sqlc.CreateCatParams{ID: id, Name: name, YearsOfExperience: int16(years_of_experience), Breed: breed, Salary: int32(salary)})
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("while creating a cat: %w", err)
+	}
+	return id, nil
 }
 
 func NewPostgres(conn *sql.DB) *Postgres {

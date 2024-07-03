@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // Querier can do queries to the entire DB
@@ -15,16 +17,7 @@ type Querier interface {
 
 // CatQuerier can only query the cat info
 type CatQuerier interface {
-	CreateCat(context.Context, Cat) error
-}
-
-type Cat struct {
-	ID int64 // Primary key
-
-	Name              string
-	YearsOfExperience uint64
-	Breed             string
-	Salary            uint64
+	CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, sallary uint) (uuid.UUID, error)
 }
 
 func ConnectToDBWithRetry(driver, address string, retries uint, interval time.Duration) (*sql.DB, error) {
