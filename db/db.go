@@ -37,6 +37,7 @@ type MissionQuerier interface {
 	CreateMission(ctx context.Context) (uuid.UUID, error)
 	CreateMissionWithTargets(ctx context.Context, targets []CreateTargetParams) (uuid.UUID, error)
 	GetMissionByID(context.Context, uuid.UUID) (MissionWithTargets, error)
+	ListMissions(ctx context.Context, pageNumber, limit uint32) ([]Mission, error)
 }
 
 type MissionWithTargets struct {
@@ -44,6 +45,12 @@ type MissionWithTargets struct {
 	AssignedCat *uuid.UUID `json:"assigned_cat"`
 	Complete    bool       `json:"complete"`
 	Targets     []Target   `json:"targets"`
+}
+
+type Mission struct {
+	ID          uuid.UUID  `json:"id"`
+	AssignedCat *uuid.UUID `json:"assigned_cat"`
+	Complete    bool       `json:"complete"`
 }
 
 type CreateTargetParams struct {

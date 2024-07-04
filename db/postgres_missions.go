@@ -101,3 +101,28 @@ func (p *Postgres) GetMissionByID(ctx context.Context, id uuid.UUID) (MissionWit
 
 	return mission, nil
 }
+
+func (p *Postgres) ListMissions(ctx context.Context, pageNumber, limit uint32) ([]Mission, error) {
+	missions, err := p.queries.ListMissions(ctx, sqlc.ListMissionsParams{
+		Limit:   int32(limit),
+		Column2: pageNumber,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get the mission list: %w", err)
+	}
+
+	result := make([]Mission, len(missions))
+	for i, m := range missions {
+		result[i] = Mission{
+			ID:          m.ID,
+			AssignedCat: nil,
+			Complete:    m.Complete,
+		}
+
+		if m.AssignedCat.Valid {
+			result[i].AssignedCat = &m.AssignedCat.UUID
+		}
+	}
+
+	return result, nil
+}

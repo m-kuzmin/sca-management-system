@@ -33,6 +33,11 @@ SELECT *
 FROM missions
 WHERE id = $1;
 
+-- name: ListMissions :many
+SELECT *
+FROM missions
+LIMIT $1 OFFSET ($2 - 1) * $1;
+
 -- name: CreateTarget :one
 INSERT INTO targets (id, name, country)
 VALUES (gen_random_uuid(), $1, $2)

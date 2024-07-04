@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -12,23 +13,19 @@ import (
 )
 
 /*
-Missions / Targets
-Ability to delete a mission
-A mission cannot be deleted if it is already assigned to a cat
-Ability to update mission
-Ability to mark it as completed
-Ability to update mission targets
-Ability to mark it as completed
-Ability to update Notes
-Notes cannot be updated if either the target or the mission is completed
-Ability to delete targets from an existing mission
-A target cannot be deleted if it is already completed
-Ability to add targets to an existing mission
-A target cannot be added if the mission is already completed
-Ability to assign a cat to a mission
-Ability to list missions
-Ability to get a single mission
-
+- Ability to delete a mission
+  A mission cannot be deleted if it is already assigned to a cat
+- Ability to update mission
+  Ability to mark it as completed
+- Ability to update mission targets
+  Ability to mark it as completed
+- Ability to update Notes
+  Notes cannot be updated if either the target or the mission is completed
+- Ability to delete targets from an existing mission
+  A target cannot be deleted if it is already completed
+- Ability to add targets to an existing mission
+  A target cannot be added if the mission is already completed
+- Ability to assign a cat to a mission
 */
 
 func (s *Server) CreateMission(ctx *gin.Context) {
@@ -81,4 +78,35 @@ func (s *Server) GetMissionByID(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusFound, mission)
+}
+
+func (s *Server) ListMissionsPaginated(ctx *gin.Context) {
+	str := ctx.Query("page")
+	page, err := strconv.Atoi(str)
+	if err != nil || page < 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid page, should be more than 1",
+		})
+		return
+	}
+
+	str = ctx.Query("limit")
+	limit, err := strconv.Atoi(str)
+	// In this project the max number of cats is small, but an upper limit would be a good idea
+	if err != nil || limit < 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid limit, should be more than 1",
+		})
+		return
+	}
+
+	missions, err := s.db.ListMissions(ctx.Request.Context(), uint32(page), uint32(limit))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "failed to list missions",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusFound, missions)
 }
