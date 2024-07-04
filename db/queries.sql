@@ -22,3 +22,33 @@ LIMIT $1 OFFSET ($2 - 1) * $1;
 UPDATE cats
 SET salary = $2
 WHERE id = $1;
+
+-- name: CreateMission :one
+INSERT INTO missions (id)
+VALUES (gen_random_uuid())
+RETURNING id;
+
+-- name: GetMissionByID :one
+SELECT *
+FROM missions
+WHERE id = $1;
+
+-- name: CreateTarget :one
+INSERT INTO targets (id, name, country)
+VALUES (gen_random_uuid(), $1, $2)
+RETURNING id;
+
+-- name: LinkTargetToMission :exec
+INSERT INTO mission_targets (target_id, mission_id)
+VALUES ($1, $2);
+
+
+-- name: GetTargetsByMissionID :many
+WITH target_ids AS (
+    SELECT target_id
+    FROM mission_targets
+    WHERE mission_id = $1
+)
+SELECT *
+FROM targets
+WHERE id IN (SELECT target_id FROM target_ids);

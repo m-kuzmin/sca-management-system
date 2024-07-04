@@ -13,5 +13,8 @@ func NewGinRouter(server *Server) *gin.Engine {
 	router.POST("/cat/by-id", server.UpdateCatSalaryByID)
 	router.DELETE("/cat", server.DeleteCatByID)
 
+	router.POST("/mission", server.CreateMission)
+	router.GET("/mission/by-id", server.GetMissionByID)
+
 	return router
 }

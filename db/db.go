@@ -13,6 +13,7 @@ import (
 // Querier can do queries to the entire DB
 type Querier interface {
 	CatQuerier
+	MissionQuerier
 }
 
 // CatQuerier can only query the cat info
@@ -30,6 +31,32 @@ type Cat struct {
 	YearsOfExperience uint32    `json:"years_of_experience"`
 	Salary            uint64    `json:"salary"`
 	ID                uuid.UUID `json:"id"`
+}
+
+type MissionQuerier interface {
+	CreateMission(ctx context.Context) (uuid.UUID, error)
+	CreateMissionWithTargets(ctx context.Context, targets []CreateTargetParams) (uuid.UUID, error)
+	GetMissionByID(context.Context, uuid.UUID) (MissionWithTargets, error)
+}
+
+type MissionWithTargets struct {
+	ID          uuid.UUID  `json:"id"`
+	AssignedCat *uuid.UUID `json:"assigned_cat"`
+	Complete    bool       `json:"complete"`
+	Targets     []Target   `json:"targets"`
+}
+
+type CreateTargetParams struct {
+	Name    string `json:"name"`
+	Country string `json:"country"`
+}
+
+type Target struct {
+	ID       uuid.UUID `json:"id"`
+	Name     string    `json:"name"`
+	Country  string    `json:"country"`
+	Notes    *string   `json:"notes"`
+	Complete bool      `json:"complete"`
 }
 
 func ConnectToDBWithRetry(driver, address string, retries uint, interval time.Duration) (*sql.DB, error) {

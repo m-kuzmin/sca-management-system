@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -21,13 +22,10 @@ func ValidateCatBreed(id string) (bool, error) {
 	// - {id} is valid: 200, {"id": "{id}"}
 	// - {id} not valid: 400, (ignore the body content)
 
-	url := url.URL{
-		Scheme: "http",
-		Host:   "api.thecatapi.com",
-		Path:   fmt.Sprintf("breed/%s", url.PathEscape(id)),
-	}
+	url := fmt.Sprintf("http://api.thecatapi.com/v1/breeds/%s", url.PathEscape(id))
 
-	resp, err := http.Get(url.String())
+	log.Printf("Making API call: %s", url)
+	resp, err := http.Get(url)
 	if err != nil {
 		return false, err
 	}
