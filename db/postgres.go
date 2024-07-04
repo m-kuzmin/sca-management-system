@@ -54,7 +54,13 @@ func (p *Postgres) Close() error {
 }
 
 // CreateCat inserts a cat.
-func (p *Postgres) CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, salary uint) (uuid.UUID, error) {
+func (p *Postgres) CreateCat(
+	ctx context.Context,
+	name string,
+	years_of_experience uint16,
+	breed string,
+	salary uint,
+) (uuid.UUID, error) {
 	id, err := uuid.NewRandom()
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("failed to create a uuid: %w", err)

@@ -27,14 +27,6 @@ func (s *Server) CreateCat(ctx *gin.Context) {
 		return
 	}
 
-	breed := ctx.Query("breed")
-	if breed == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "breed is empty",
-		})
-		return
-	}
-
 	str := ctx.Query("years_of_experience")
 	yearsOfExperience, err := strconv.Atoi(str)
 	if err != nil || yearsOfExperience < 0 {
@@ -49,6 +41,28 @@ func (s *Server) CreateCat(ctx *gin.Context) {
 	if err != nil || sallary < 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "invalid salary, should be a positive integer",
+		})
+		return
+	}
+
+	breed := ctx.Query("breed")
+	if breed == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "breed is empty",
+		})
+		return
+	}
+
+	validBreed, err := ValidateCatBreed(breed)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "failure while validating the cat breed",
+		})
+		return
+	}
+	if !validBreed {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "breed is invalid",
 		})
 		return
 	}
