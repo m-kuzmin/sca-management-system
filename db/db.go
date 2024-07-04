@@ -42,6 +42,7 @@ type MissionQuerier interface {
 	CreateMissionWithTargets(ctx context.Context, targets []CreateTargetParams) (uuid.UUID, error)
 	GetMissionByID(context.Context, uuid.UUID) (MissionWithTargets, error)
 	ListMissions(context.Context, PaginationParams) ([]Mission, error)
+	CompleteMission(context.Context, uuid.UUID) error
 }
 
 type MissionWithTargets struct {

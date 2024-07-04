@@ -12,22 +12,6 @@ import (
 	"github.com/m-kuzmin/sca-management-system/db"
 )
 
-/*
-- Ability to delete a mission
-  A mission cannot be deleted if it is already assigned to a cat
-- Ability to update mission
-  Ability to mark it as completed
-- Ability to update mission targets
-  Ability to mark it as completed
-- Ability to update Notes
-  Notes cannot be updated if either the target or the mission is completed
-- Ability to delete targets from an existing mission
-  A target cannot be deleted if it is already completed
-- Ability to add targets to an existing mission
-  A target cannot be added if the mission is already completed
-- Ability to assign a cat to a mission
-*/
-
 func (s *Server) CreateMission(ctx *gin.Context) {
 	var targets []db.CreateTargetParams
 
@@ -109,4 +93,23 @@ func (s *Server) ListMissionsPaginated(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusFound, missions)
+}
+
+func (s *Server) CompleteMission(ctx *gin.Context) {
+	str := ctx.Query("id")
+	id := uuid.UUID{}
+
+	err := id.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing mission id"))
+		return
+	}
+
+	err = s.db.CompleteMission(ctx.Request.Context(), id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("failed to mark mission as complete"))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"success": true})
 }

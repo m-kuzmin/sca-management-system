@@ -126,3 +126,12 @@ func (p *Postgres) ListMissions(ctx context.Context, pagination PaginationParams
 
 	return result, nil
 }
+
+func (p *Postgres) CompleteMission(ctx context.Context, id uuid.UUID) error {
+	err := p.queries.CompleteMission(ctx, id)
+	if err != nil {
+		return fmt.Errorf("failed to complete mission with id %s: %w", id, err)
+	}
+
+	return nil
+}
