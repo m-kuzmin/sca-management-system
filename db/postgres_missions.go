@@ -102,10 +102,10 @@ func (p *Postgres) GetMissionByID(ctx context.Context, id uuid.UUID) (MissionWit
 	return mission, nil
 }
 
-func (p *Postgres) ListMissions(ctx context.Context, pageNumber, limit uint32) ([]Mission, error) {
+func (p *Postgres) ListMissions(ctx context.Context, pagination PaginationParams) ([]Mission, error) {
 	missions, err := p.queries.ListMissions(ctx, sqlc.ListMissionsParams{
-		Limit:   int32(limit),
-		Column2: pageNumber,
+		Limit:   int32(pagination.Limit),
+		Column2: pagination.PageNumber,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mission list: %w", err)

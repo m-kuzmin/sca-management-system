@@ -100,7 +100,7 @@ func (s *Server) ListMissionsPaginated(ctx *gin.Context) {
 		return
 	}
 
-	missions, err := s.db.ListMissions(ctx.Request.Context(), uint32(page), uint32(limit))
+	missions, err := s.db.ListMissions(ctx.Request.Context(), db.PaginationParams{PageNumber: uint32(page), Limit: uint32(limit)})
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"message": "failed to list missions",

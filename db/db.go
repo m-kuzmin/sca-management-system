@@ -20,9 +20,13 @@ type Querier interface {
 type CatQuerier interface {
 	CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, salary uint) (uuid.UUID, error)
 	GetCatByID(context.Context, uuid.UUID) (Cat, error)
-	GetCatsPaginated(ctx context.Context, amountPerPage, pageNumber uint32) ([]Cat, error)
+	GetCatsPaginated(context.Context, PaginationParams) ([]Cat, error)
 	UpdateCatSalaryByID(context.Context, uuid.UUID, uint32) error
 	DeleteCatByID(context.Context, uuid.UUID) error
+}
+
+type PaginationParams struct {
+	PageNumber, Limit uint32
 }
 
 type Cat struct {
@@ -37,7 +41,7 @@ type MissionQuerier interface {
 	CreateMission(ctx context.Context) (uuid.UUID, error)
 	CreateMissionWithTargets(ctx context.Context, targets []CreateTargetParams) (uuid.UUID, error)
 	GetMissionByID(context.Context, uuid.UUID) (MissionWithTargets, error)
-	ListMissions(ctx context.Context, pageNumber, limit uint32) ([]Mission, error)
+	ListMissions(context.Context, PaginationParams) ([]Mission, error)
 }
 
 type MissionWithTargets struct {

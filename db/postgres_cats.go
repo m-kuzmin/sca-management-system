@@ -50,13 +50,13 @@ func (p *Postgres) GetCatByID(ctx context.Context, id uuid.UUID) (Cat, error) {
 }
 
 // GetCatsPaginated returns a list of cats given the page number and amount per page.
-func (p *Postgres) GetCatsPaginated(ctx context.Context, amountPerPage, pageNumber uint32) ([]Cat, error) {
+func (p *Postgres) GetCatsPaginated(ctx context.Context, pagination PaginationParams) ([]Cat, error) {
 	cats, err := p.queries.ListCatsPaginated(ctx, sqlc.ListCatsPaginatedParams{
-		Limit:   int32(amountPerPage),
-		Column2: pageNumber,
+		Limit:   int32(pagination.Limit),
+		Column2: pagination.PageNumber,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to list cats on page %d, with page size %d", pageNumber, amountPerPage)
+		return nil, fmt.Errorf("failed to list cats on page %d, with page size %d", pagination.PageNumber, pagination.Limit)
 	}
 
 	result := make([]Cat, len(cats))

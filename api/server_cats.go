@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/m-kuzmin/sca-management-system/db"
 )
 
 func (s *Server) CreateCat(ctx *gin.Context) {
@@ -113,7 +114,9 @@ func (s *Server) ListCatsPaginated(ctx *gin.Context) {
 		return
 	}
 
-	cats, err := s.db.GetCatsPaginated(ctx.Request.Context(), uint32(limit), uint32(page))
+	cats, err := s.db.GetCatsPaginated(ctx.Request.Context(), db.PaginationParams{
+		PageNumber: uint32(page), Limit: uint32(limit),
+	})
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"message": "failed to list cats",
