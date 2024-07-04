@@ -1,3 +1,7 @@
+BEGIN;
+
 DROP TABLE IF EXISTS missions;
 DROP TABLE IF EXISTS targets;
 DROP TABLE IF EXISTS mission_targets;
+
+COMMIT;

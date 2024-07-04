@@ -1,3 +1,5 @@
+BEGIN;
+
 CREATE TABLE missions (
     id UUID PRIMARY KEY,
     assigned_cat UUID REFERENCES cats(id),
@@ -18,3 +20,4 @@ CREATE TABLE mission_targets (
     PRIMARY KEY (mission_id, target_id)
 );
 
+COMMIT;
