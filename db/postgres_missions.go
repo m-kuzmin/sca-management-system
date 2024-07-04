@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -136,8 +137,32 @@ func (p *Postgres) CompleteMission(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
+func (p *Postgres) GetTargetCompleteStatus(ctx context.Context, id uuid.UUID) (bool, error) {
+	complete, err := p.queries.GetTargetCompeleteStatus(ctx, id)
+	if err != nil {
+		return false, fmt.Errorf("failed to complete target with id %s: %w", id, err)
+	}
+
+	return complete, nil
+}
+
 func (p *Postgres) CompleteTarget(ctx context.Context, id uuid.UUID) error {
 	err := p.queries.CompleteTarget(ctx, id)
+	if err != nil {
+		return fmt.Errorf("failed to complete target with id %s: %w", id, err)
+	}
+
+	return nil
+}
+
+func (p *Postgres) UpdateTargetNotes(ctx context.Context, id uuid.UUID, notes string) error {
+	err := p.queries.UpdateTargetNotes(ctx, sqlc.UpdateTargetNotesParams{
+		ID: id,
+		Notes: sql.NullString{
+			Valid:  len(notes) == 0,
+			String: notes,
+		},
+	})
 	if err != nil {
 		return fmt.Errorf("failed to complete target with id %s: %w", id, err)
 	}

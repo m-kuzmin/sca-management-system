@@ -14,6 +14,12 @@ func NewServer(db db.Querier) *Server {
 	return &Server{db: db}
 }
 
+// errorRespJSON returns {message: $message}
 func errorRespJSON(message string) gin.H {
 	return gin.H{"message": message}
+}
+
+// successTrue returns {success: true}
+func successTrue() gin.H {
+	return gin.H{"success": true}
 }

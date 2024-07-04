@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -18,6 +19,11 @@ func (s *Server) CreateMission(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&targets)
 	if err != nil && !errors.Is(err, io.EOF) { // body is optional
 		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to read JSON body"))
+		return
+	}
+
+	if len(targets) > 3 { // TODO: should it be len > 1 ?
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("failed to read JSON body"))
 		return
 	}
 
@@ -131,4 +137,45 @@ func (s *Server) CompleteTarget(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func (s *Server) UpdateTargetNotes(ctx *gin.Context) {
+	str := ctx.Query("id")
+	id := uuid.UUID{}
+
+	err := id.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing target id"))
+		return
+	}
+
+	var notes struct {
+		Notes string `json:"notes"`
+	}
+
+	err = ctx.ShouldBindJSON(&notes)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid body JSON"))
+		return
+	}
+
+	isComplete, err := s.db.GetTargetCompleteStatus(ctx.Request.Context(), id)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to get target's complete status"))
+		return
+	}
+
+	if isComplete {
+		ctx.JSON(http.StatusForbidden, errorRespJSON("target is already completed"))
+		return
+	}
+
+	err = s.db.UpdateTargetNotes(ctx, id, notes.Notes)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, errorRespJSON("failed to update target notes"))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, successTrue())
 }

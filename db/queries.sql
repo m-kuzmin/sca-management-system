@@ -67,3 +67,13 @@ WHERE id IN (SELECT target_id FROM target_ids);
 UPDATE targets
 SET complete = true
 WHERE id = $1;
+
+-- name: UpdateTargetNotes :exec
+UPDATE targets
+SET notes = $2
+WHERE id = $1;
+
+-- name: GetTargetCompeleteStatus :one
+SELECT complete
+FROM targets
+WHERE id = $1;

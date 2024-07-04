@@ -43,7 +43,9 @@ type MissionQuerier interface {
 	GetMissionByID(context.Context, uuid.UUID) (MissionWithTargets, error)
 	ListMissions(context.Context, PaginationParams) ([]Mission, error)
 	CompleteMission(context.Context, uuid.UUID) error
+	GetTargetCompleteStatus(ctx context.Context, id uuid.UUID) (bool, error)
 	CompleteTarget(ctx context.Context, id uuid.UUID) error
+	UpdateTargetNotes(ctx context.Context, id uuid.UUID, notes string) error
 }
 
 type MissionWithTargets struct {
