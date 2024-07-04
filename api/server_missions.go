@@ -252,6 +252,25 @@ func (s *Server) AssignCatToMission(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, successTrue())
 }
 
+func (s *Server) DeleteTarget(ctx *gin.Context) {
+	str := ctx.Query("id")
+	id := uuid.UUID{}
+
+	err := id.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing target id"))
+		return
+	}
+
+	err = s.db.DeleteTarget(ctx.Request.Context(), id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to delete target"))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, successTrue())
+}
+
 func validateAndNormalizeTargetCreateParams(target *db.CreateTargetParams) bool {
 	if target.Name == "" {
 		return false

@@ -223,3 +223,12 @@ func (p *Postgres) AssignCatToMission(ctx context.Context, params AssignCatToMis
 
 	return nil
 }
+
+func (p *Postgres) DeleteTarget(ctx context.Context, id uuid.UUID) error {
+	err := p.queries.DeleteTarget(ctx, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete target with id %s: %w", id, err)
+	}
+
+	return nil
+}

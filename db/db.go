@@ -49,6 +49,7 @@ type MissionQuerier interface {
 	UpdateTargetNotes(ctx context.Context, id uuid.UUID, notes string) error
 	CountMissionTargets(context.Context, uuid.UUID) (uint64, error)
 	AssignCatToMission(ctx context.Context, params AssignCatToMissionParams) error
+	DeleteTarget(ctx context.Context, id uuid.UUID) error
 }
 
 type MissionWithTargets struct {

@@ -86,3 +86,7 @@ WHERE mission_id = $1;
 UPDATE missions
 SET assigned_cat = $2
 WHERE id = $1;
+
+-- name: DeleteTarget :exec
+DELETE FROM targets
+WHERE id = $1;
