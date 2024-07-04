@@ -15,8 +15,8 @@ CREATE TABLE targets (
 );
 
 CREATE TABLE mission_targets (
-    mission_id UUID REFERENCES missions(id),
-    target_id UUID REFERENCES targets(id),
+    mission_id UUID REFERENCES missions(id) ON DELETE CASCADE,
+    target_id UUID REFERENCES targets(id) ON DELETE CASCADE,
     PRIMARY KEY (mission_id, target_id)
 );
 
