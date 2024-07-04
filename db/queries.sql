@@ -81,3 +81,8 @@ WHERE id = $1;
 SELECT COUNT(*)
 FROM mission_targets
 WHERE mission_id = $1;
+
+-- name: AssignCatToMission :exec
+UPDATE missions
+SET assigned_cat = $2
+WHERE id = $1;

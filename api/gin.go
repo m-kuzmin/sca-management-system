@@ -18,6 +18,7 @@ func NewGinRouter(server *Server) *gin.Engine {
 	router.GET("/mission/list", server.ListMissionsPaginated)
 	router.POST("/mission/complete", server.CompleteMission)
 	router.POST("/mission/target", server.AddTargetsToMission)
+	router.POST("/mission/assign", server.AssignCatToMission)
 
 	router.POST("/target/complete", server.CompleteTarget)
 	router.POST("/target/notes", server.UpdateTargetNotes)

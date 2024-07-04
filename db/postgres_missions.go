@@ -211,3 +211,15 @@ func (p *Postgres) UpdateTargetNotes(ctx context.Context, id uuid.UUID, notes st
 
 	return nil
 }
+
+func (p *Postgres) AssignCatToMission(ctx context.Context, params AssignCatToMissionParams) error {
+	err := p.queries.AssignCatToMission(ctx, sqlc.AssignCatToMissionParams{
+		ID:          params.Mission,
+		AssignedCat: uuid.NullUUID{Valid: true, UUID: params.Cat},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to assign a cat to mission: %w", err)
+	}
+
+	return nil
+}

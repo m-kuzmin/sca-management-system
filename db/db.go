@@ -48,6 +48,7 @@ type MissionQuerier interface {
 	CompleteTarget(ctx context.Context, id uuid.UUID) error
 	UpdateTargetNotes(ctx context.Context, id uuid.UUID, notes string) error
 	CountMissionTargets(context.Context, uuid.UUID) (uint64, error)
+	AssignCatToMission(ctx context.Context, params AssignCatToMissionParams) error
 }
 
 type MissionWithTargets struct {
@@ -61,6 +62,11 @@ type Mission struct {
 	ID          uuid.UUID  `json:"id"`
 	AssignedCat *uuid.UUID `json:"assigned_cat"`
 	Complete    bool       `json:"complete"`
+}
+
+type AssignCatToMissionParams struct {
+	Cat     uuid.UUID
+	Mission uuid.UUID
 }
 
 type CreateTargetParams struct {

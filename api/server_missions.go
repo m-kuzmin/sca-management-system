@@ -221,6 +221,37 @@ func (s *Server) UpdateTargetNotes(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, successTrue())
 }
 
+func (s *Server) AssignCatToMission(ctx *gin.Context) {
+	str := ctx.Query("mission")
+	mission := uuid.UUID{}
+
+	err := mission.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing mission id"))
+		return
+	}
+
+	str = ctx.Query("cat")
+	cat := uuid.UUID{}
+
+	err = cat.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing cat id"))
+		return
+	}
+
+	err = s.db.AssignCatToMission(ctx.Request.Context(), db.AssignCatToMissionParams{
+		Mission: mission,
+		Cat:     cat,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to assign a cat to a mission"))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, successTrue())
+}
+
 func validateAndNormalizeTargetCreateParams(target *db.CreateTargetParams) bool {
 	if target.Name == "" {
 		return false
