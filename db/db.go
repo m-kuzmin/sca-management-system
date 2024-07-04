@@ -19,6 +19,7 @@ type Querier interface {
 type CatQuerier interface {
 	CreateCat(ctx context.Context, name string, years_of_experience uint16, breed string, salary uint) (uuid.UUID, error)
 	GetCatByID(context.Context, uuid.UUID) (Cat, error)
+	GetCatsPaginated(ctx context.Context, amountPerPage, pageNumber uint32) ([]Cat, error)
 	DeleteCatByID(context.Context, uuid.UUID) error
 }
 

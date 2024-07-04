@@ -88,6 +88,29 @@ func (p *Postgres) GetCatByID(ctx context.Context, id uuid.UUID) (Cat, error) {
 	}, nil
 }
 
+func (p *Postgres) GetCatsPaginated(ctx context.Context, amountPerPage, pageNumber uint32) ([]Cat, error) {
+	cats, err := p.queries.ListCatsPaginated(ctx, sqlc.ListCatsPaginatedParams{
+		Limit:   int32(amountPerPage),
+		Column2: pageNumber,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to list cats on page %d, with page size %d", pageNumber, amountPerPage)
+	}
+
+	result := make([]Cat, len(cats))
+	for i, cat := range cats {
+		result[i] = Cat{
+			Name:              cat.Name,
+			Breed:             cat.Breed,
+			YearsOfExperience: uint32(cat.YearsOfExperience),
+			Salary:            uint64(cat.Salary),
+			ID:                cat.ID,
+		}
+	}
+
+	return result, nil
+}
+
 // DeleteCat deletes a cat. Returns nil on successful deletion
 func (p *Postgres) DeleteCatByID(ctx context.Context, id uuid.UUID) error {
 	if err := p.queries.DeteleCatByID(ctx, id); err != nil {

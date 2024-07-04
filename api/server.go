@@ -89,6 +89,37 @@ func (s *Server) GetCatByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusFound, cat)
 }
 
+func (s *Server) ListCatsPaginated(ctx *gin.Context) {
+	str := ctx.Query("page")
+	page, err := strconv.Atoi(str)
+	if err != nil || page < 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid page, should be more than 1",
+		})
+		return
+	}
+
+	str = ctx.Query("limit")
+	limit, err := strconv.Atoi(str)
+	// In this project the max number of cats is small, but an upper limit would be a good idea
+	if err != nil || limit < 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid limit, should be more than 1",
+		})
+		return
+	}
+
+	cats, err := s.db.GetCatsPaginated(ctx.Request.Context(), uint32(limit), uint32(page))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "failed to list cats",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusFound, cats)
+}
+
 func (s *Server) DeleteCatByID(ctx *gin.Context) {
 	str := ctx.Query("id")
 	id := uuid.UUID{}
