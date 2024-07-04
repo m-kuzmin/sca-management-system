@@ -135,3 +135,12 @@ func (p *Postgres) CompleteMission(ctx context.Context, id uuid.UUID) error {
 
 	return nil
 }
+
+func (p *Postgres) CompleteTarget(ctx context.Context, id uuid.UUID) error {
+	err := p.queries.CompleteTarget(ctx, id)
+	if err != nil {
+		return fmt.Errorf("failed to complete target with id %s: %w", id, err)
+	}
+
+	return nil
+}

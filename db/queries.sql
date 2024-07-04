@@ -62,3 +62,8 @@ WITH target_ids AS (
 SELECT *
 FROM targets
 WHERE id IN (SELECT target_id FROM target_ids);
+
+-- name: CompleteTarget :exec
+UPDATE targets
+SET complete = true
+WHERE id = $1;
