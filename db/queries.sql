@@ -17,3 +17,8 @@ WHERE id = $1;
 SELECT *
 FROM cats
 LIMIT $1 OFFSET ($2 - 1) * $1;
+
+-- name: UpdateCatSalaryByID :exec
+UPDATE cats
+SET salary = $2
+WHERE id = $1;

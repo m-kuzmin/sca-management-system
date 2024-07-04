@@ -10,6 +10,7 @@ func NewGinRouter(server *Server) *gin.Engine {
 	router.POST("/cat", server.CreateCat)
 	router.GET("/cat/by-id", server.GetCatByID)
 	router.GET("/cat/list", server.ListCatsPaginated)
+	router.POST("/cat/by-id", server.UpdateCatSalaryByID)
 	router.DELETE("/cat", server.DeleteCatByID)
 
 	return router
