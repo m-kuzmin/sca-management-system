@@ -262,6 +262,17 @@ func (s *Server) DeleteTarget(ctx *gin.Context) {
 		return
 	}
 
+	isComplete, err := s.db.GetTargetCompleteStatus(ctx.Request.Context(), id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to check task status"))
+		return
+	}
+
+	if isComplete {
+		ctx.JSON(http.StatusForbidden, errorRespJSON("cannot delete a completed task"))
+		return
+	}
+
 	err = s.db.DeleteTarget(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to delete target"))
