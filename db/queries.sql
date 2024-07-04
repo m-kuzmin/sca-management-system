@@ -44,23 +44,14 @@ SET complete = true
 WHERE id = $1;
 
 -- name: CreateTarget :one
-INSERT INTO targets (id, name, country)
-VALUES (gen_random_uuid(), $1, $2)
+INSERT INTO targets (id, name, country, mission_id)
+VALUES (gen_random_uuid(), $1, $2, $3)
 RETURNING id;
 
--- name: LinkTargetToMission :exec
-INSERT INTO mission_targets (target_id, mission_id)
-VALUES ($1, $2);
-
 -- name: GetTargetsByMissionID :many
-WITH target_ids AS (
-    SELECT target_id
-    FROM mission_targets
-    WHERE mission_id = $1
-)
 SELECT *
 FROM targets
-WHERE id IN (SELECT target_id FROM target_ids);
+WHERE mission_id = $1;
 
 -- name: CompleteTarget :exec
 UPDATE targets
@@ -72,14 +63,15 @@ UPDATE targets
 SET notes = $2
 WHERE id = $1;
 
--- name: GetTargetCompeleteStatus :one
-SELECT complete
+-- name: GetTargetCompleteStatus :one
+SELECT targets.complete OR missions.complete
 FROM targets
-WHERE id = $1;
+JOIN missions ON missions.id = targets.mission_id
+WHERE targets.id = $1;
 
 -- name: CountMissionTargets :one
 SELECT COUNT(*)
-FROM mission_targets
+FROM targets
 WHERE mission_id = $1;
 
 -- name: AssignCatToMission :exec
@@ -89,4 +81,18 @@ WHERE id = $1;
 
 -- name: DeleteTarget :exec
 DELETE FROM targets
+WHERE id = $1;
+
+-- name: DeleteMission :exec
+DELETE FROM missions
+WHERE id = $1 ;
+
+-- name: IsAssignedMission :one
+SELECT assigned_cat IS NOT NULL
+FROM missions
+WHERE id = $1;
+
+-- name: MissionIsCompleted :one
+SELECT complete
+FROM missions
 WHERE id = $1;

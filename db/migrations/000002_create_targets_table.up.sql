@@ -8,16 +8,11 @@ CREATE TABLE missions (
 
 CREATE TABLE targets (
     id UUID PRIMARY KEY,
+    mission_id UUID NOT NULL REFERENCES missions(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     country CHAR(3) NOT NULL,
     notes TEXT,
     complete BOOLEAN NOT NULL DEFAULT false
-);
-
-CREATE TABLE mission_targets (
-    mission_id UUID REFERENCES missions(id) ON DELETE CASCADE,
-    target_id UUID REFERENCES targets(id) ON DELETE CASCADE,
-    PRIMARY KEY (mission_id, target_id)
 );
 
 COMMIT;

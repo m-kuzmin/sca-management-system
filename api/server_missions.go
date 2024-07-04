@@ -121,6 +121,17 @@ func (s *Server) AddTargetsToMission(ctx *gin.Context) {
 		}
 	}
 
+	completed, err := s.db.MissionIsCompleted(ctx.Request.Context(), missionID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to check mission completion status"))
+		return
+	}
+
+	if completed {
+		ctx.JSON(http.StatusForbidden, errorRespJSON("taks is already completed, cannot add anything to it"))
+		return
+	}
+
 	currentlyTargets, err := s.db.CountMissionTargets(ctx.Request.Context(), missionID)
 	log.Println(currentlyTargets)
 	if err != nil {
@@ -264,12 +275,12 @@ func (s *Server) DeleteTarget(ctx *gin.Context) {
 
 	isComplete, err := s.db.GetTargetCompleteStatus(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to check task status"))
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to check target status"))
 		return
 	}
 
 	if isComplete {
-		ctx.JSON(http.StatusForbidden, errorRespJSON("cannot delete a completed task"))
+		ctx.JSON(http.StatusForbidden, errorRespJSON("cannot delete a completed target"))
 		return
 	}
 
@@ -282,6 +293,35 @@ func (s *Server) DeleteTarget(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, successTrue())
 }
 
+func (s *Server) DeleteMission(ctx *gin.Context) {
+	str := ctx.Query("id")
+	id := uuid.UUID{}
+
+	err := id.UnmarshalText([]byte(str))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing mission id"))
+		return
+	}
+
+	isAssigned, err := s.db.IsAssignedMission(ctx.Request.Context(), id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to check mission assignment status"))
+		return
+	}
+
+	if isAssigned {
+		ctx.JSON(http.StatusForbidden, errorRespJSON("cannot delete an assigned mission"))
+		return
+	}
+
+	err = s.db.DeleteMission(ctx.Request.Context(), id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to delete mission"))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, successTrue())
+}
 func validateAndNormalizeTargetCreateParams(target *db.CreateTargetParams) bool {
 	if target.Name == "" {
 		return false

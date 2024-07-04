@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -41,18 +42,14 @@ func (p *Postgres) CreateMissionWithTargets(ctx context.Context, targets []Creat
 	}
 
 	for _, t := range targets {
-		targetID, err := qtx.CreateTarget(ctx, sqlc.CreateTargetParams{
-			Name:    t.Name,
-			Country: t.Country,
+		_, err := qtx.CreateTarget(ctx, sqlc.CreateTargetParams{
+			Name:      t.Name,
+			Country:   t.Country,
+			MissionID: missionID,
 		})
 		if err != nil {
 			return uuid.Nil, fmt.Errorf("failed to create a target: %w", err)
 		}
-
-		err = qtx.LinkTargetToMission(ctx, sqlc.LinkTargetToMissionParams{
-			MissionID: missionID,
-			TargetID:  targetID,
-		})
 
 		if err != nil {
 			return uuid.Nil, fmt.Errorf("failed to link the mission and the target: %w", err)
@@ -158,19 +155,12 @@ func (p *Postgres) AddTargetsToMission(ctx context.Context, missionID uuid.UUID,
 	ids := make([]uuid.UUID, len(targets))
 	for i, t := range targets {
 		targetID, err := qtx.CreateTarget(ctx, sqlc.CreateTargetParams{
-			Name:    t.Name,
-			Country: t.Country,
+			Name:      t.Name,
+			Country:   t.Country,
+			MissionID: missionID,
 		})
 		if err != nil {
 			return nil, fmt.Errorf("failed to create a target: %w", err)
-		}
-
-		err = qtx.LinkTargetToMission(ctx, sqlc.LinkTargetToMissionParams{
-			MissionID: missionID,
-			TargetID:  targetID,
-		})
-		if err != nil {
-			return nil, fmt.Errorf("failed to link the mission and the target: %w", err)
 		}
 
 		ids[i] = targetID
@@ -180,12 +170,16 @@ func (p *Postgres) AddTargetsToMission(ctx context.Context, missionID uuid.UUID,
 }
 
 func (p *Postgres) GetTargetCompleteStatus(ctx context.Context, id uuid.UUID) (bool, error) {
-	complete, err := p.queries.GetTargetCompeleteStatus(ctx, id)
+	complete, err := p.queries.GetTargetCompleteStatus(ctx, id)
 	if err != nil {
 		return false, fmt.Errorf("failed to complete target with id %s: %w", id, err)
 	}
 
-	return complete, nil
+	if !complete.Valid {
+		return false, errors.New("target not found in database")
+	}
+
+	return complete.Bool, nil
 }
 
 func (p *Postgres) CompleteTarget(ctx context.Context, id uuid.UUID) error {
@@ -231,4 +225,31 @@ func (p *Postgres) DeleteTarget(ctx context.Context, id uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func (p *Postgres) DeleteMission(ctx context.Context, id uuid.UUID) error {
+	err := p.queries.DeleteMission(ctx, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete mission with id %s: %w", id, err)
+	}
+
+	return nil
+}
+
+func (p *Postgres) IsAssignedMission(ctx context.Context, id uuid.UUID) (bool, error) {
+	assignedAny, err := p.queries.IsAssignedMission(ctx, id)
+	if err != nil {
+		return false, fmt.Errorf("failed to delete mission with id %s: %w", id, err)
+	}
+
+	return assignedAny.(bool), nil
+}
+
+func (p *Postgres) MissionIsCompleted(ctx context.Context, id uuid.UUID) (bool, error) {
+	completed, err := p.queries.MissionIsCompleted(ctx, id)
+	if err != nil {
+		return false, fmt.Errorf("failed to get mission complete status for id %s: %w", id, err)
+	}
+
+	return completed, nil
 }

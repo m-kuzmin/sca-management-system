@@ -10,7 +10,7 @@ func NewGinRouter(server *Server) *gin.Engine {
 	router.POST("/cat", server.CreateCat)
 	router.GET("/cat/by-id", server.GetCatByID)
 	router.GET("/cat/list", server.ListCatsPaginated)
-	router.POST("/cat/by-id", server.UpdateCatSalaryByID)
+	router.POST("/cat/salary", server.UpdateCatSalaryByID)
 	router.DELETE("/cat", server.DeleteCatByID)
 
 	router.POST("/mission", server.CreateMission)
@@ -19,6 +19,7 @@ func NewGinRouter(server *Server) *gin.Engine {
 	router.POST("/mission/complete", server.CompleteMission)
 	router.POST("/mission/target", server.AddTargetsToMission)
 	router.POST("/mission/assign", server.AssignCatToMission)
+	router.DELETE("/mission", server.DeleteMission)
 
 	router.POST("/target/complete", server.CompleteTarget)
 	router.POST("/target/notes", server.UpdateTargetNotes)

@@ -50,6 +50,9 @@ type MissionQuerier interface {
 	CountMissionTargets(context.Context, uuid.UUID) (uint64, error)
 	AssignCatToMission(ctx context.Context, params AssignCatToMissionParams) error
 	DeleteTarget(ctx context.Context, id uuid.UUID) error
+	DeleteMission(ctx context.Context, id uuid.UUID) error
+	IsAssignedMission(ctx context.Context, id uuid.UUID) (bool, error)
+	MissionIsCompleted(ctx context.Context, id uuid.UUID) (bool, error)
 }
 
 type MissionWithTargets struct {
