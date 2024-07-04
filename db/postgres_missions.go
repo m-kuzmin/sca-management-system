@@ -46,7 +46,7 @@ func (p *Postgres) CreateMissionWithTargets(ctx context.Context, targets []Creat
 			Country: t.Country,
 		})
 		if err != nil {
-			return uuid.Nil, fmt.Errorf("failed to create a mission: %w", err)
+			return uuid.Nil, fmt.Errorf("failed to create a target: %w", err)
 		}
 
 		err = qtx.LinkTargetToMission(ctx, sqlc.LinkTargetToMissionParams{
@@ -135,6 +135,48 @@ func (p *Postgres) CompleteMission(ctx context.Context, id uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func (p *Postgres) CountMissionTargets(ctx context.Context, id uuid.UUID) (uint64, error) {
+	count, err := p.queries.CountMissionTargets(ctx, id)
+	if err != nil {
+		return 0, fmt.Errorf("failed to count targets: %w", err)
+	}
+
+	return uint64(count), nil
+}
+
+func (p *Postgres) AddTargetsToMission(ctx context.Context, missionID uuid.UUID, targets []CreateTargetParams) ([]uuid.UUID, error) {
+	tx, err := p.conn.Begin()
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction: %w", err)
+	}
+	defer tx.Rollback()
+
+	qtx := p.queries.WithTx(tx)
+
+	ids := make([]uuid.UUID, len(targets))
+	for i, t := range targets {
+		targetID, err := qtx.CreateTarget(ctx, sqlc.CreateTargetParams{
+			Name:    t.Name,
+			Country: t.Country,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("failed to create a target: %w", err)
+		}
+
+		err = qtx.LinkTargetToMission(ctx, sqlc.LinkTargetToMissionParams{
+			MissionID: missionID,
+			TargetID:  targetID,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("failed to link the mission and the target: %w", err)
+		}
+
+		ids[i] = targetID
+	}
+
+	return ids, tx.Commit()
 }
 
 func (p *Postgres) GetTargetCompleteStatus(ctx context.Context, id uuid.UUID) (bool, error) {

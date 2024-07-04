@@ -52,7 +52,6 @@ RETURNING id;
 INSERT INTO mission_targets (target_id, mission_id)
 VALUES ($1, $2);
 
-
 -- name: GetTargetsByMissionID :many
 WITH target_ids AS (
     SELECT target_id
@@ -77,3 +76,8 @@ WHERE id = $1;
 SELECT complete
 FROM targets
 WHERE id = $1;
+
+-- name: CountMissionTargets :one
+SELECT COUNT(*)
+FROM mission_targets
+WHERE mission_id = $1;

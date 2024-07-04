@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -13,6 +14,8 @@ import (
 	"github.com/m-kuzmin/sca-management-system/db"
 )
 
+const MaxTargets = 3
+
 func (s *Server) CreateMission(ctx *gin.Context) {
 	var targets []db.CreateTargetParams
 
@@ -22,23 +25,16 @@ func (s *Server) CreateMission(ctx *gin.Context) {
 		return
 	}
 
-	if len(targets) > 3 { // TODO: should it be len > 1 ?
+	if len(targets) > MaxTargets { // TODO: should it be len > 1 ?
 		ctx.JSON(http.StatusBadRequest, errorRespJSON("failed to read JSON body"))
 		return
 	}
 
 	for _, target := range targets {
-		if target.Name == "" {
-			ctx.JSON(http.StatusInternalServerError, errorRespJSON("must specify a name for a target"))
+		if !validateAndNormalizeTargetCreateParams(&target) {
+			ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid target create data"))
 			return
 		}
-
-		if len(target.Country) == 0 || len(target.Country) > 3 {
-			ctx.JSON(http.StatusInternalServerError, errorRespJSON("country must be a 3 letter code"))
-			return
-		}
-
-		target.Country = strings.ToLower(target.Country)
 	}
 
 	id, err := s.db.CreateMissionWithTargets(ctx.Request.Context(), targets)
@@ -99,6 +95,51 @@ func (s *Server) ListMissionsPaginated(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusFound, missions)
+}
+
+func (s *Server) AddTargetsToMission(ctx *gin.Context) {
+	str := ctx.Query("id")
+	missionID := uuid.UUID{}
+
+	if missionID.UnmarshalText([]byte(str)) != nil {
+		ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid or missing mission id"))
+		return
+	}
+
+	var targets []db.CreateTargetParams
+
+	err := ctx.ShouldBindJSON(&targets)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("body contains invalid JSON"))
+		return
+	}
+
+	for _, target := range targets {
+		if !validateAndNormalizeTargetCreateParams(&target) {
+			ctx.JSON(http.StatusBadRequest, errorRespJSON("invalid target create data"))
+			return
+		}
+	}
+
+	currentlyTargets, err := s.db.CountMissionTargets(ctx.Request.Context(), missionID)
+	log.Println(currentlyTargets)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to count existing targets"))
+		return
+	}
+
+	if len(targets) > MaxTargets-int(currentlyTargets) { // TODO: should it be len > 1 ?
+		ctx.JSON(http.StatusBadRequest, errorRespJSON(fmt.Sprintf("a mission can only have a maximum %d targets", MaxTargets)))
+		return
+	}
+
+	targetIDs, err := s.db.AddTargetsToMission(ctx.Request.Context(), missionID, targets)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorRespJSON("failed to add targets to mission"))
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, targetIDs)
 }
 
 func (s *Server) CompleteMission(ctx *gin.Context) {
@@ -178,4 +219,17 @@ func (s *Server) UpdateTargetNotes(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, successTrue())
+}
+
+func validateAndNormalizeTargetCreateParams(target *db.CreateTargetParams) bool {
+	if target.Name == "" {
+		return false
+	}
+
+	if len(target.Country) != 3 {
+		return false
+	}
+
+	target.Country = strings.ToLower(target.Country)
+	return true
 }
