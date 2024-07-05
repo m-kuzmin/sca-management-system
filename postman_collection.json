@@ -1,0 +1,1207 @@
+{
+	"info": {
+		"_postman_id": "2af06b10-6c57-4bfe-ba8e-07cdf0d07d11",
+		"name": "Spy Cat Agency M Kuzmin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36755298"
+	},
+	"item": [
+		{
+			"name": "Cat requests",
+			"item": [
+				{
+					"name": "Create Cat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/cat?name=Agent 007&breed=abys&salary=3000&years_of_experience=5",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"cat"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Agent 007"
+								},
+								{
+									"key": "breed",
+									"value": "abys"
+								},
+								{
+									"key": "salary",
+									"value": "3000"
+								},
+								{
+									"key": "years_of_experience",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Agent 007",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/cat?name=Agent 007&breed=abys&salary=3000&years_of_experience=5",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"cat"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Agent 007"
+										},
+										{
+											"key": "breed",
+											"value": "abys",
+											"description": "4 letter code, validated by api.thecatapi.com/v1/breed/$breed"
+										},
+										{
+											"key": "salary",
+											"value": "3000"
+										},
+										{
+											"key": "years_of_experience",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:18:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "45"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"4522067e-9ddd-4b29-827b-42b63a6bbd2d\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List cats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/cat/list?page=1&limit=10",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"cat",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Results per page"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example cat list",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/cat/list?page=1&limit=10",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"cat",
+										"list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Results per page"
+										}
+									]
+								}
+							},
+							"status": "Found",
+							"code": 302,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:20:23 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "119"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"name\": \"Agent 007\",\n        \"breed\": \"abys\",\n        \"years_of_experience\": 5,\n        \"salary\": 3000,\n        \"id\": \"4522067e-9ddd-4b29-827b-42b63a6bbd2d\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Cat By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/cat/by-id?id=4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"cat",
+								"by-id"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+									"description": "Cat ID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example cat object",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/cat/by-id?id=4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"cat",
+										"by-id"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+											"description": "Cat UUID"
+										}
+									]
+								}
+							},
+							"status": "Found",
+							"code": 302,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:21:54 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "117"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"Agent 007\",\n    \"breed\": \"abys\",\n    \"years_of_experience\": 5,\n    \"salary\": 3000,\n    \"id\": \"4522067e-9ddd-4b29-827b-42b63a6bbd2d\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Salary",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/cat/salary?id=e4b149ff-fae2-43df-b071-4d4d95f33652&salary=10000",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"cat",
+								"salary"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "e4b149ff-fae2-43df-b071-4d4d95f33652",
+									"description": "Cat ID"
+								},
+								{
+									"key": "salary",
+									"value": "10000",
+									"description": "New salary value"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Give 007 a raise",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/cat/salary?id=e4b149ff-fae2-43df-b071-4d4d95f33652&salary=10000",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"cat",
+										"salary"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "e4b149ff-fae2-43df-b071-4d4d95f33652",
+											"description": "Cat ID"
+										},
+										{
+											"key": "salary",
+											"value": "10000",
+											"description": "New salary value"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 21:01:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Cat",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/cat?id=4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"cat"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+									"description": "Cat ID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Retire 007",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/cat?id=4522067e-9ddd-4b29-827b-42b63a6bbd2d",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"cat"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4522067e-9ddd-4b29-827b-42b63a6bbd2d"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:25:59 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Mission requests",
+			"item": [
+				{
+					"name": "Create mission",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"name\": \"Mr. ?\",\n        \"country\": \"USA\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/mission",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Mr. ?, USA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"name\": \"Mr. ?\",\n        \"country\": \"USA\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000/mission",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:32:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "45"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"6c543380-5329-40c6-a67f-2ff79eb97236\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List missions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/mission/list?page=1&limit=10",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Results on page"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example Missions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/mission/list?page=1&limit=10",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission",
+										"list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Results on page"
+										}
+									]
+								}
+							},
+							"status": "Found",
+							"code": 302,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:53:22 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "200"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"74059cbd-3bd6-41b9-9326-d08b7265a9b6\",\n        \"assigned_cat\": null,\n        \"complete\": false\n    },\n    {\n        \"id\": \"6c543380-5329-40c6-a67f-2ff79eb97236\",\n        \"assigned_cat\": \"e4b149ff-fae2-43df-b071-4d4d95f33652\",\n        \"complete\": true\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Mission By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/mission/by-id?id=6c543380-5329-40c6-a67f-2ff79eb97236",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission",
+								"by-id"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6c543380-5329-40c6-a67f-2ff79eb97236",
+									"description": "Mission ID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example mission",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/mission/by-id?id=6c543380-5329-40c6-a67f-2ff79eb97236",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission",
+										"by-id"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+										}
+									]
+								}
+							},
+							"status": "Found",
+							"code": 302,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:37:51 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "201"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"6c543380-5329-40c6-a67f-2ff79eb97236\",\n    \"assigned_cat\": null,\n    \"complete\": false,\n    \"targets\": [\n        {\n            \"id\": \"4d214229-f59c-4480-923a-bf12bb2f2ad4\",\n            \"name\": \"Mr. ?\",\n            \"country\": \"USA\",\n            \"notes\": null,\n            \"complete\": false\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Mark as completed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/mission/complete?id=6c543380-5329-40c6-a67f-2ff79eb97236",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission",
+								"complete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Mark as completed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/mission/complete?id=6c543380-5329-40c6-a67f-2ff79eb97236",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission",
+										"complete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:40:06 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Assign Cat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/mission/assign?cat=e4b149ff-fae2-43df-b071-4d4d95f33652&mission=6c543380-5329-40c6-a67f-2ff79eb97236",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission",
+								"assign"
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "e4b149ff-fae2-43df-b071-4d4d95f33652"
+								},
+								{
+									"key": "mission",
+									"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Assign Cat",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/mission/assign?cat=e4b149ff-fae2-43df-b071-4d4d95f33652&mission=6c543380-5329-40c6-a67f-2ff79eb97236",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission",
+										"assign"
+									],
+									"query": [
+										{
+											"key": "cat",
+											"value": "e4b149ff-fae2-43df-b071-4d4d95f33652"
+										},
+										{
+											"key": "mission",
+											"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 20:53:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Mission",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/mission?id=8f9b5168-c871-49dd-94c1-9958ff807fda",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "8f9b5168-c871-49dd-94c1-9958ff807fda"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful deletion",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/mission?id=1e0d4a42-99f1-4ed5-a48e-48316ea48ce3",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1e0d4a42-99f1-4ed5-a48e-48316ea48ce3",
+											"description": "Mission ID"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 23:13:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Add target to mission",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\"name\": \"-\", \"country\": \"USA\"}\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/mission/target?id=1e0d4a42-99f1-4ed5-a48e-48316ea48ce3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"mission",
+								"target"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1e0d4a42-99f1-4ed5-a48e-48316ea48ce3"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful add",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\"name\": \"-\", \"country\": \"USA\"}\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000/mission/target?id=1e0d4a42-99f1-4ed5-a48e-48316ea48ce3",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission",
+										"target"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1e0d4a42-99f1-4ed5-a48e-48316ea48ce3"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 23:07:06 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    \"64753986-79d1-4c7b-aa71-942d55175e6d\"\n]"
+						},
+						{
+							"name": "Error: mission is completed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\"name\": \"-\", \"country\": \"USA\"}\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000/mission/target?id=1e0d4a42-99f1-4ed5-a48e-48316ea48ce3",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"mission",
+										"target"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1e0d4a42-99f1-4ed5-a48e-48316ea48ce3"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 23:09:33 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "66"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"taks is already completed, cannot add anything to it\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Targets",
+			"item": [
+				{
+					"name": "Update Notes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"notes\": \"Meow! UwU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/target/notes?id=",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"target",
+								"notes"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Target",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/target/complete?id=6c543380-5329-40c6-a67f-2ff79eb97236",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"target",
+								"complete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/target/complete?id=6c543380-5329-40c6-a67f-2ff79eb97236",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"target",
+										"complete"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "6c543380-5329-40c6-a67f-2ff79eb97236"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 21:11:56 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Target From Mission",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/target?id=6c937fef-49cb-4dff-ae30-d217c4ab4dd5",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"target"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6c937fef-49cb-4dff-ae30-d217c4ab4dd5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Mr. ?",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/target?id=4d214229-f59c-4480-923a-bf12bb2f2ad4",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"target"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4d214229-f59c-4480-923a-bf12bb2f2ad4"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 21:10:05 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						},
+						{
+							"name": "Error: target already completed",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/target?id=64753986-79d1-4c7b-aa71-942d55175e6d",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"target"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "64753986-79d1-4c7b-aa71-942d55175e6d"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 04 Jul 2024 23:12:14 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "46"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"cannot delete a completed target\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
