@@ -39,7 +39,6 @@ func main() {
 	server := api.NewServer(postgres)
 	router := api.NewGinRouter(server)
 
-	gin.DefaultWriter = log.Writer()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 	log.Println("Setup Gin router")
